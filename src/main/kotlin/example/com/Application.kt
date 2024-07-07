@@ -14,8 +14,9 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
     val dbName = "ktor-prac"
+    val dbPW = System.getenv("MONGO_PW")
     val db = MongoClient.create(
-        connectionString = "mongodb+srv://abdulmajidzeeshan4:tutorial202@cluster0.zgl8kvx.mongodb.net/$dbName?retryWrites=true&w=majority&appName=Cluster0"
+        connectionString = "mongodb+srv://abdulmajidzeeshan4:$dbPW@cluster0.zgl8kvx.mongodb.net/$dbName?retryWrites=true&w=majority&appName=Cluster0"
     ).getDatabase(dbName)
 
     val userDataSource = MongoUserDataSource(db)
@@ -26,7 +27,7 @@ fun Application.module() {
         issuer = environment.config.property("jwt.issuer").getString(),
         audience = environment.config.property("jwt.audience").getString(),
         expiry = 1000 * 60 * 60 *24*365,
-        secret = "secret"
+        secret = System.getenv("SECRET")
     )
 
     val hashingService = SHA256HashingService()
