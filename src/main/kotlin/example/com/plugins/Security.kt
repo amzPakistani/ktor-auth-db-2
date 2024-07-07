@@ -11,7 +11,7 @@ import io.ktor.server.response.*
 fun Application.configureSecurity(config: TokenConfig) {
     // Please read the jwt property from the config file if you are using EngineMain
 
-    val jwtRealm = this@configureSecurity.environment.config.property("jwt.realms").getString()
+    val jwtRealm = this@configureSecurity.environment.config.property("jwt.realm").getString()
     authentication {
         jwt {
             realm = jwtRealm
