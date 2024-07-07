@@ -1,4 +1,4 @@
-package example.com.data.model
+package example.com.data.user.model
 
 import kotlinx.serialization.Serializable
 import org.bson.codecs.pojo.annotations.BsonId

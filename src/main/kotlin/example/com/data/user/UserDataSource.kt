@@ -1,6 +1,6 @@
-package example.com.data
+package example.com.data.user
 
-import example.com.data.model.User
+import example.com.data.user.model.User
 
 interface UserDataSource {
     suspend fun getUserByUsername(username:String): User?

@@ -1,8 +1,11 @@
 package example.com
 
 import com.mongodb.kotlin.client.coroutine.MongoClient
-import example.com.data.MongoUserDataSource
+import example.com.data.user.MongoUserDataSource
 import example.com.plugins.*
+import example.com.security.hashing.SHA256HashingService
+import example.com.security.token.JWTTokenService
+import example.com.security.token.TokenConfig
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {
@@ -17,8 +20,18 @@ fun Application.module() {
 
     val userDataSource = MongoUserDataSource(db)
 
+    val tokenService = JWTTokenService()
+
+    val tokenConfig = TokenConfig(
+        issuer = environment.config.property("jwt.issuer").getString(),
+        audience = environment.config.property("jwt.audience").getString(),
+        expiry = 1000 * 60 * 60 *24*365,
+        secret = "secret"
+    )
+
+    val hashingService = SHA256HashingService()
     configureSerialization()
     configureMonitoring()
-    configureSecurity()
-    configureRouting()
+    configureSecurity(tokenConfig)
+    configureRouting(userDataSource = userDataSource, hashingService, tokenConfig = tokenConfig, tokenSevice = tokenService )
 }

@@ -9,9 +9,12 @@ class SHA256HashingService:HashingService {
         val salt = SecureRandom.getInstance("SHA1PRNG").generateSeed(saltLength)
         val saltHex = Hex.encodeHexString(salt)
         val hash = DigestUtils.sha256Hex("$salt$value")
+        return SaltedHash(
+            hash,saltHex
+        )
     }
 
     override fun verify(value: String, saltedHash: SaltedHash): Boolean {
-        TODO("Not yet implemented")
+        return DigestUtils.sha256Hex(saltedHash.salt+value)==saltedHash.hash
     }
 }
